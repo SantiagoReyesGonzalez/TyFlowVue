@@ -1,262 +1,207 @@
+<script setup>
+import { ref } from 'vue';
+
+const email = ref('');
+const password = ref('');
+
+const handleSubmit = () => {
+  console.log('Iniciando sesión con:', email.value, password.value);
+  // Aquí iría tu lógica de autenticación
+};
+</script>
+
 <template>
   <main class="login-page">
-    
     <div class="login-card">
       
-      <div class="login-card__form">
-        <h1>Autenticación</h1>
-        <form id="loginForm">
-          <label for="email">Usuario</label>
-          <input type="email" id="email" required>
-
-          <label for="password">Contraseña</label>
-          <input type="password" id="password" required>
-          
-          <p id="msg"></p>
-          <button type="submit">Iniciar Sesión</button>
-        </form>
+      <div class="login-card__banner">
+        <h3>TYFLOW</h3>
+        <p>Gestiona y optimiza tu reparto de manera eficiente.</p>
       </div>
 
-      <div class="login-card__banner">
-        <h3>Bienvenido a TYFLOW</h3>
-        <p>El sistema integral para gestionar y optimizar tu reparto de manera eficiente y segura</p>
+      <div class="login-card__form">
+        <h1>Autenticación</h1>
+        <form @submit.prevent="handleSubmit" id="loginForm">
+          <label for="email">Usuario</label>
+          <input 
+            v-model="email" 
+            type="email" 
+            id="email" 
+            placeholder="correo@ejemplo.com" 
+            required
+          >
+
+          <label for="password">Contraseña</label>
+          <input 
+            v-model="password" 
+            type="password" 
+            id="password" 
+            placeholder="••••••••" 
+            required
+          >
+          
+          <p id="msg"></p>
+          <button type="submit" class="btn-submit">Iniciar Sesión</button>
+        </form>
       </div>
 
     </div>
   </main>
 </template>
 
-<script>
-
-</script>
-
 <style scoped>
+/* Variables sugeridas (asegúrate de tenerlas en tu archivo global o cámbiarlas por valores fijos) */
+:root {
+  --primary-500: #3b82f6;
+  --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  --bg-main: #f3f4f6;
+  --bg-card: #ffffff;
+  --text-main: #1f2937;
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
 
-/* =========================================
-   5. VISTA: LOGIN (login.css)
-   ========================================= */
 .login-page {
-  /* Ocupar el 100% del alto de la ventana visible */
-  height: 100vh; 
-  /* Activar Flexbox */
-  display: flex; 
-  /* Centrar verticalmente */
-  align-items: center; 
-  /* Centrar horizontalmente */
-  justify-content: center; 
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--bg-main);
-}
-/* EL BLOQUE: La tarjeta principal */
-.login-card {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide la tarjeta en dos mitades */
-    width: 900px;
-    min-height: 500px;
-    background-color: var(--bg-card);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
+  padding: 1rem; /* Margen para que no toque los bordes en móvil */
 }
 
-/* ELEMENTO 1: Formulario izquierdo */
+.login-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 900px;
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
 .login-card__form {
-    display: flex;
-    flex-direction: column;
-    padding: 3rem;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  justify-content: center;
 }
 
 .login-card__form h1 {
-    text-align: center;
-    color: var(--primary-500);
-    margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--primary-500);
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .login-card__form label {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
 .login-card__form input {
-    width: 100%;
-    padding: 10px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
 }
 
-.login-card__form button {
-    padding: 15px;
-    margin-top: 2rem;
-    background-color: var(--btn-primary-bg);
-    color: var(--btn-primary-text);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+.btn-submit {
+  padding: 15px;
+  margin-top: 2rem;
+  background-color: var(--primary-500);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background 0.3s;
 }
 
-.login-card__form button:hover {
-    background-color: var(--btn-primary-hover);
-}
-
-/* ELEMENTO 2: Banner derecho */
 .login-card__banner {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-image: var(--primary-gradient);
-    padding: 60px;
-    color: var(--btn-primary-text);
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary-gradient);
+  padding: 60px;
+  color: white;
+  text-align: center;
 }
 
 .login-card__banner h3 {
-    font-size: 2.6rem;
-    margin-bottom: 20px;
-}   
-.container-login {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 900px;
-    min-height: 500px;
-    background-color: var(--bg-card);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    /* Se centra usando grid/flex en el contenedor padre o el body para esta vista */
-    margin: auto; 
-    margin-top: 10vh; /* Ajuste temporal para centrar si el body no tiene place-items */
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.container-login-left {
-    display: flex;
-    flex-direction: column;
-    padding: 3rem;
-    gap: 1rem;
-}
-
-.container-login-left h1 {
-    padding: 10px 10px 30px 10px;
-    text-align: center;
-    color: var(--primary-500);
-}
-
-.container-login-left label {
-    display: block;
-    padding: 10px 0;
-    margin-top: 10px;
-}
-
-.container-login-left input {
-    padding: 10px 10px;
-    width: 100%;
-    background-color: var(--bg-main);
-    border: none;
-    border-radius: 8px;
-    color: var(--text-secondary);
-}
-
-.container-login-left input:focus {
-    outline: none;
-    border-color: var(--input-focus);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-}
-
-.container-login-left input:hover {
-    border-color: var(--input-focus);
-    box-shadow: 0 0 0 3px rgba(59, 131, 246, 0.116);
-}
-
-.container-login-left button {
-    display: block;
-    padding: 25px 10px;
-    margin-top: 40px;
-    width: 100%;
-    background-color: var(--btn-primary-bg);
-    border: none;
-    border-radius: 8px;
-    color: var(--btn-primary-text);
-}
-
-.container-login-left button:hover {
-    background-color: var(--btn-primary-hover);
-    cursor: pointer;
-}   
-
-.container-login-left button:active {
-    background-color: var(--btn-primary-active);
-}
-
-.container-login-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-image: var(--primary-gradient);
-    padding: 60px;
-    color: var(--btn-primary-text);
-}
-
-.container-login-right h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2.6rem;
-}
-
-.container-login-right p {
-    margin-top: 30px;
-    text-align: center;
-    font-size: 1.2rem;
-    line-height: 1.5rem;
-}
-
+/* =========================================
+   ADAPTACIÓN PARA CELULARES (Mobile)
+   ========================================= */
 @media (max-width: 768px) {
-    .container-login {
-        grid-template-columns: 1fr; 
-        width: 100%;                
-        min-height: auto;
-        border-radius: 0;
-        height: 100vh;              
-        margin-top: 0;
-    }
+  .login-page {
+    padding: 0; /* En móvil aprovechamos todo el espacio */
+    align-items: flex-start; /* Permite scroll si el teclado aparece */
+  }
 
-    .container-login-left,
-    .container-login-right {
-        padding: 4rem 3rem;        
-    }
+  .login-card {
+    grid-template-columns: 1fr; /* Una sola columna */
+    border-radius: 0; /* Estilo full-screen */
+    min-height: 100vh;
+    box-shadow: none;
+  }
 
-    .container-login-left {
-        order: 2; 
-    }
-    
-    .container-login-right {
-        order: 1; 
-        height: auto;
-    }
+  .login-card__banner {
+    padding: 40px 20px;
+    order: 1; /* El banner va arriba */
+  }
 
-    .container-login-left h1 {
-        display: none;
-    }
+  .login-card__banner h3 {
+    font-size: 2rem;
+  }
 
-    .container-login-right h3 {
-        font-size: 1.5rem;
-        margin-bottom: 0;
-    }
+  .login-card__banner p {
+    font-size: 0.9rem;
+  }
 
-    .container-login-right p {
-        font-size: 1rem;
-        line-height: 1.4rem;
-    }
+  .login-card__form {
+    padding: 2rem;
+    order: 2; /* El formulario va abajo */
+  }
 
-    .container-login-left input,
-    .container-login-left button {
-        width: 100%;               
-    }
+  .login-card__form h1 {
+    font-size: 1.5rem;
+  }
 
-    .container-login-left button {
-        padding: 20px 10px;
-        margin-top: 20px;
-    }
+  /* Mejora táctil para inputs y botones */
+  .login-card__form input {
+    padding: 14px; 
+    font-size: 16px; /* Evita que iOS haga zoom automático al enfocar */
+  }
+
+  .btn-submit {
+    margin-top: 1.5rem;
+    padding: 18px;
+  }
+
+  .login-card__form button, 
+  .btn-submit {
+    width: 100%;        /* Ocupa todo el ancho del formulario */
+    display: block;     /* Se asegura de comportarse como un bloque */
+    margin-top: 1.5rem; 
+    padding: 16px;      /* Un poco más de área de toque */
+    font-size: 1.1rem;  /* Fuente ligeramente más grande para legibilidad */
+    border-radius: 8px; /* Coherente con los inputs */
+  }
+
+  /* Asegúrate de que el formulario no tenga un alineado a la izquierda forzado */
+  #loginForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 }
-
 </style>
