@@ -45,9 +45,15 @@ export const useAuthStore = defineStore("auth", () => {
       // Nota: Usamos session.value.user.id para estar seguros de quién es el usuario
       const { data, error } = await supabase
         .from("usuarios")
-        .select(
-          "primerNombre, segundoNombre, primerApellido, segundoApellido, estado",
-        )
+        .select(`
+        primerNombre, 
+        segundoNombre, 
+        primerApellido, 
+        segundoApellido, 
+        estado,
+        usuarioRol ( roles ( nombreRol ) ),
+        usuarioArea ( areas ( nombreArea ) )
+        `)
         .eq("id", session.value.user.id)
         .maybeSingle();
 
@@ -56,13 +62,21 @@ export const useAuthStore = defineStore("auth", () => {
 
       // 4. ✅ ÉXITO: Guardamos la info en nuestra variable reactiva
       if (data) {
-        profile.value = data;
-        console.log("Perfil cargado con éxito:", profile.value);
+        if (!data.estado) {
+          await logout (); // Cerramos sesión por seguridad
+          throw new Error("Usuario inactivo");
+        }else{
+            data.usuarioArea = data.usuarioArea.map(item => item.areas.nombreArea);
+            data.usuarioRol = data.usuarioRol.map(item => item.roles.nombreRol);
+            profile.value = data;
+            console.log("Perfil cargado con éxito:", profile.value);
+        }
       }
     } catch (error) {
       // Aquí caen tanto errores de red como el "throw error" de arriba
       console.error("Error al obtener el perfil:", error.message);
       profile.value = null; // Limpiamos por seguridad si algo falla
+      throw error; // Lanzamos el error para que LoginView pueda mostrarlo en rojo
     }
   };
 

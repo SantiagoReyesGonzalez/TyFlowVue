@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router'; // 👈 Importamos el GPS desde la librería oficial
+
+const router = useRouter();
 
 // 1. Diccionario local de la vista
 const ERROR_MESSAGES = {
@@ -8,7 +11,8 @@ const ERROR_MESSAGES = {
   "Email not confirmed": "Debes confirmar tu correo electrónico antes de entrar.",
   "User not found": "No existe un usuario con ese correo.",
   "Password is too short": "La contraseña debe tener al menos 6 caracteres.",
-  "Network error": "Hubo un problema de conexión. Revisa tu internet."
+  "Network error": "Hubo un problema de conexión. Revisa tu internet.",
+  "Usuario inactivo": "Tu cuenta está inactiva. Contacta al soporte."
 };
 
 const email = ref('');
@@ -25,7 +29,7 @@ const handleSubmit = async () => {
     await authStore.login(email.value, password.value);
     
     console.log('¡Bienvenido! Navegando al Dashboard...');
-    // Aquí podrías usar router.push('/dashboard')
+    router.push('/dashboard')
 
   } catch (error) {
     // 🛠️ MAPEAMOS EL ERROR AQUÍ:
