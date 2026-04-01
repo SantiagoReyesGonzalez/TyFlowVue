@@ -2,27 +2,42 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 
+// 1. Diccionario local de la vista
+const ERROR_MESSAGES = {
+  "Invalid login credentials": "El correo o la contraseña son incorrectos.",
+  "Email not confirmed": "Debes confirmar tu correo electrónico antes de entrar.",
+  "User not found": "No existe un usuario con ese correo.",
+  "Password is too short": "La contraseña debe tener al menos 6 caracteres.",
+  "Network error": "Hubo un problema de conexión. Revisa tu internet."
+};
+
 const email = ref('');
 const password = ref('');
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 const errorMessage = ref('');
 
 const handleSubmit = async () => {
-  console.log('Iniciando sesión con:', email.value, password.value);
-  // ------------------------------------------------------------------
-  // 🛠️ TU RETO AQUÍ:
-  // 3. Usa un try/catch para llamar a la acción 'login' pasándole el email y password.
+  errorMessage.value = ''; // Limpiamos antes de empezar
+  console.log('Iniciando sesión con:', email.value);
+
   try {
+    // Llamamos al store (que ahora solo lanza el error crudo de Supabase)
     await authStore.login(email.value, password.value);
-    console.log('¡Listo! Ya podemos navegar al Dashboard')
+    
+    console.log('¡Bienvenido! Navegando al Dashboard...');
+    // Aquí podrías usar router.push('/dashboard')
 
   } catch (error) {
-    errorMessage.value = 'Error al entrar: ' + error.message;
+    // 🛠️ MAPEAMOS EL ERROR AQUÍ:
+    // Buscamos el mensaje original en nuestro diccionario.
+    // Si no está, mostramos un mensaje amigable genérico.
+    const translatedMessage = ERROR_MESSAGES[error.message] || 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+    
+    errorMessage.value = translatedMessage;
+    
+    console.error('Error detectado:', error.message);
   }
-  // 4. Si falla, guarda el mensaje de error en 'errorMessage.value'.
-  // 5. Si tiene éxito, haz un console.log de "¡Bienvenido!" (luego haremos la redirección).
-  // ------------------------------------------------------------------
-};  
+};
 </script>
 
 <template>
@@ -55,7 +70,7 @@ const handleSubmit = async () => {
             required
           >
           
-          <p v-if="errorMessage" id="msg">{{errorMessage}}</p>
+          <p v-if="errorMessage" id="msg" class="errorMessage">{{errorMessage}}</p>
           <button type="submit" class="btn-submit">Iniciar Sesión</button>
         </form>
       </div>
@@ -66,6 +81,12 @@ const handleSubmit = async () => {
 
 <style scoped>
 
+.errorMessage {
+  color: var(--error-500);
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: bold;
+}
 .login-page {
   min-height: 100vh;
   display: flex;

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { supabase } from "../api/supabase"; // 🔌 Nuestro cable a la base de datos
 
+
 export const useAuthStore = defineStore("auth", () => {
   // 1. ESTADO (La memoria)
   const session = ref(null); // Guarda el token y datos crudos de Supabase
@@ -17,7 +18,7 @@ export const useAuthStore = defineStore("auth", () => {
         email,
         password,
       });
-      console.log("Intentando hacer login con", email);
+      console.log("Conectando con Supabase para hacer login con", email);
       // 2. Si hay error, lánzalo (throw error).
       if (error) throw error;
 
