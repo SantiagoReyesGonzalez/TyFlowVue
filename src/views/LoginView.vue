@@ -1,13 +1,28 @@
 <script setup>
 import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
 const email = ref('');
 const password = ref('');
+const authStore = useAuthStore()
+const errorMessage = ref('');
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   console.log('Iniciando sesión con:', email.value, password.value);
-  // Aquí iría tu lógica de autenticación
-};
+  // ------------------------------------------------------------------
+  // 🛠️ TU RETO AQUÍ:
+  // 3. Usa un try/catch para llamar a la acción 'login' pasándole el email y password.
+  try {
+    await authStore.login(email.value, password.value);
+    console.log('¡Listo! Ya podemos navegar al Dashboard')
+
+  } catch (error) {
+    errorMessage.value = 'Error al entrar: ' + error.message;
+  }
+  // 4. Si falla, guarda el mensaje de error en 'errorMessage.value'.
+  // 5. Si tiene éxito, haz un console.log de "¡Bienvenido!" (luego haremos la redirección).
+  // ------------------------------------------------------------------
+};  
 </script>
 
 <template>
@@ -40,7 +55,7 @@ const handleSubmit = () => {
             required
           >
           
-          <p id="msg"></p>
+          <p v-if="errorMessage" id="msg">{{errorMessage}}</p>
           <button type="submit" class="btn-submit">Iniciar Sesión</button>
         </form>
       </div>
@@ -50,15 +65,6 @@ const handleSubmit = () => {
 </template>
 
 <style scoped>
-/* Variables sugeridas (asegúrate de tenerlas en tu archivo global o cámbiarlas por valores fijos) */
-:root {
-  --primary-500: #3b82f6;
-  --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  --bg-main: #f3f4f6;
-  --bg-card: #ffffff;
-  --text-main: #1f2937;
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
 
 .login-page {
   min-height: 100vh;
