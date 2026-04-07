@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
   // 🚦 TU TURNO:
   // Sabemos que en auth.js declaraste 'const session = ref(null)'
   // ¿Cómo escribirías esta variable para saber si la sesión existe?
-  const tieneSesionActiva = ???; 
+  const tieneSesionActiva = authStore.session !== null 
   // ---------------------------------------------------------
 
   // 3. Lógica de control de tráfico
