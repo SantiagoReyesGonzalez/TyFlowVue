@@ -70,6 +70,8 @@ export const useAuthStore = defineStore("auth", () => {
             data.usuarioRol = data.usuarioRol.map(item => item.roles.nombreRol);
             profile.value = data;
             console.log("Perfil cargado con éxito:", profile.value);
+            console.log("Roles:", data.usuarioRol);
+            console.log("Roles:", data.usuarioArea);
         }
       }
     } catch (error) {
@@ -77,6 +79,24 @@ export const useAuthStore = defineStore("auth", () => {
       console.error("Error al obtener el perfil:", error.message);
       profile.value = null; // Limpiamos por seguridad si algo falla
       throw error; // Lanzamos el error para que LoginView pueda mostrarlo en rojo
+    }
+  };
+
+  const initAuth = async () => {
+    try {
+      // 1. Ahora sí, hacemos la llamada dentro de la zona segura
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) throw error;
+
+      // 2. Verificamos si Supabase encontró una sesión en el navegador
+      if (data.session) {
+        session.value = data.session; // Guardamos la sesión
+        await fetchProfile(); // Cargamos el perfil
+      }
+
+    } catch (error) {
+      console.error("Error al iniciar la sesión guardada:", error.message);
     }
   };
 
