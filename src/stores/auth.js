@@ -112,5 +112,6 @@ export const useAuthStore = defineStore("auth", () => {
     profile,
     login,
     logout,
+    initAuth,
   };
 });
